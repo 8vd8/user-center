@@ -8,11 +8,13 @@
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/renren-generator/pom.xml" />
         <option value="$PROJECT_DIR$/usercenter-service/pom.xml" />
+        <option value="$PROJECT_DIR$/usercenter-logging/pom.xml" />
+        <option value="$PROJECT_DIR$/usercenter-gateway/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
       <set>
-        <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/usercenter-logging/pom.xml" />
       </set>
     </option>
   </component>

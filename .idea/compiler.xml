@@ -8,18 +8,21 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="usercenter-common" />
+        <module name="usercenter-gateway" />
         <module name="usercenter-service" />
         <module name="renren-generator" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="user-center" target="1.8" />
+      <module name="usercenter-logging" target="1.8" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="renren-generator" options="-parameters" />
       <module name="usercenter-common" options="-parameters" />
+      <module name="usercenter-logging" options="-parameters" />
       <module name="usercenter-service" options="-parameters" />
     </option>
   </component>

@@ -1,0 +1,45 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: gateway-service
+  main:
+    web-application-type: reactive
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+      config:
+        server-addr: localhost:8848
+        file-extension: yml
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/user/**
+          filters:
+            - StripPrefix=1
+        - id: permission-service
+          uri: lb://permission-service
+          predicates:
+            - Path=/permission/**
+          filters:
+            - StripPrefix=1
+        - id: logging-service
+          uri: lb://logging-service
+          predicates:
+            - Path=/logging/**
+          filters:
+            - StripPrefix=1
+
+# 日志配置
+logging:
+  level:
+    com.xzc: debug
+    org.springframework.cloud.gateway: debug
