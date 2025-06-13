@@ -1,15 +1,18 @@
 package com.xzc.usercenter.service.feign;
 
-import com.baomidou.mybatisplus.extension.api.R;
+import com.xzc.common.utils.R;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 /**
  * 权限服务Feign客户端
  * @author xzc
  */
-@FeignClient(name = "usercenter-permisson")
+@FeignClient(name = "usercenter-permission")
 public interface PermissionServiceClient {
     
     /**
@@ -24,4 +27,16 @@ public interface PermissionServiceClient {
     @PostMapping("/permission/check")
     R<Boolean> checkPermission(@RequestParam("userId") Long userId,
                                    @RequestParam("permission") String permission);
+
+    /**
+     * 获取用户角色ID
+     */
+    @GetMapping("/permission/user-role-id")
+    R<Integer> getUserRoleId(@RequestParam("userId") Long userId);
+
+    /**
+     * 根据角色ID获取用户ID列表
+     */
+    @GetMapping("/permission/users-by-role")
+    R<List<Long>> getUserIdsByRoleId(@RequestParam("roleId") Integer roleId);
 }

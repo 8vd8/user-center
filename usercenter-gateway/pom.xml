@@ -17,6 +17,10 @@
     <description>网关服务</description>
 
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-loadbalancer</artifactId>
+        </dependency>
         <!-- 公共模块 -->
         <dependency>
             <groupId>com.xzc</groupId>

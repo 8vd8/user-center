@@ -3,7 +3,9 @@
   <component name="DataSourcePerFileMappings">
     <file url="file://$PROJECT_DIR$/sql/init.sql" value="b706d493-d2de-4990-82c3-71cb1c8a0180" />
     <file url="file://$PROJECT_DIR$/sql/sharding-init.sql" value="b706d493-d2de-4990-82c3-71cb1c8a0180" />
+    <file url="file://$APPLICATION_CONFIG_DIR$/consoles/db/b706d493-d2de-4990-82c3-71cb1c8a0180/console.sql" value="b706d493-d2de-4990-82c3-71cb1c8a0180" />
     <file url="file://$APPLICATION_CONFIG_DIR$/consoles/db/b706d493-d2de-4990-82c3-71cb1c8a0180/console_1.sql" value="b706d493-d2de-4990-82c3-71cb1c8a0180" />
     <file url="file://$APPLICATION_CONFIG_DIR$/consoles/db/b706d493-d2de-4990-82c3-71cb1c8a0180/console_2.sql" value="b706d493-d2de-4990-82c3-71cb1c8a0180" />
+    <file url="file://$APPLICATION_CONFIG_DIR$/consoles/db/b706d493-d2de-4990-82c3-71cb1c8a0180/console_3.sql" value="b706d493-d2de-4990-82c3-71cb1c8a0180" />
   </component>
 </project>

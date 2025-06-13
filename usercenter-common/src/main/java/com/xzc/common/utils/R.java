@@ -19,7 +19,7 @@ import java.util.Map;
  *
  * @author Mark sunlightcs@gmail.com
  */
-public class R extends HashMap<String, Object> {
+public class R<T> extends HashMap<String, Object> {
 	private static final long serialVersionUID = 1L;
 	
 	// 成功状态码
@@ -43,69 +43,69 @@ public class R extends HashMap<String, Object> {
 	
 	// ========== 错误返回方法 ==========
 	
-	public static R error() {
+	public static <T> R<T> error() {
 		return error(ERROR_CODE, "未知异常，请联系管理员");
 	}
 	
-	public static R error(String msg) {
+	public static <T> R<T> error(String msg) {
 		return error(ERROR_CODE, msg);
 	}
 	
-	public static R error(int code, String msg) {
-		R r = new R();
+	public static <T> R<T> error(int code, String msg) {
+		R<T> r = new R<>();
 		r.put("code", code);
 		r.put("msg", msg);
 		return r;
 	}
 	
 	// 参数错误
-	public static R paramError(String msg) {
+	public static <T> R<T> paramError(String msg) {
 		return error(PARAM_ERROR_CODE, msg);
 	}
 	
 	// 未授权
-	public static R unauthorized(String msg) {
+	public static <T> R<T> unauthorized(String msg) {
 		return error(UNAUTHORIZED_CODE, msg != null ? msg : "未授权访问");
 	}
 	
 	// 禁止访问
-	public static R forbidden(String msg) {
+	public static <T> R<T> forbidden(String msg) {
 		return error(FORBIDDEN_CODE, msg != null ? msg : "禁止访问");
 	}
 	
 	// 资源不存在
-	public static R notFound(String msg) {
+	public static <T> R<T> notFound(String msg) {
 		return error(NOT_FOUND_CODE, msg != null ? msg : "资源不存在");
 	}
 	
 	// ========== 成功返回方法 ==========
 	
-	public static R ok() {
-		return new R();
+	public static <T> R<T> ok() {
+		return new R<>();
 	}
 	
-	public static R ok(String msg) {
-		R r = new R();
+	public static <T> R<T> ok(String msg) {
+		R<T> r = new R<>();
 		r.put("msg", msg);
 		return r;
 	}
 	
-	public static R ok(Map<String, Object> map) {
-		R r = new R();
+	public static <T> R<T> ok(Map<String, Object> map) {
+		R<T> r = new R<>();
 		r.putAll(map);
 		return r;
 	}
 	
 	// 返回数据对象
-	public static R ok(Object data) {
-		R r = new R();
+	public static <T> R<T> ok(T data) {
+		R<T> r = new R<>();
 		r.put("data", data);
 		return r;
 	}
 	
 	// 返回数据对象和消息
-	public static R ok(Object data, String msg) {
-		R r = new R();
+	public static <T> R<T> ok(T data, String msg) {
+		R<T> r = new R<>();
 		r.put("data", data);
 		r.put("msg", msg);
 		return r;
@@ -114,31 +114,31 @@ public class R extends HashMap<String, Object> {
 	// ========== 用户服务专用方法 ==========
 	
 	// 登录成功返回token
-	public static R loginSuccess(String token) {
-		R r = new R();
+	public static R<String> loginSuccess(String token) {
+		R<String> r = new R<>();
 		r.put("token", token);
 		r.put("msg", "登录成功");
 		return r;
 	}
 	
 	// 注册成功
-	public static R registerSuccess() {
+	public static <T> R<T> registerSuccess() {
 		return ok("注册成功");
 	}
 	
 	// 更新成功
-	public static R updateSuccess() {
+	public static <T> R<T> updateSuccess() {
 		return ok("更新成功");
 	}
 	
 	// 删除成功
-	public static R deleteSuccess() {
+	public static <T> R<T> deleteSuccess() {
 		return ok("删除成功");
 	}
 	
 	// 返回用户信息
-	public static R userInfo(Object user) {
-		R r = new R();
+	public static <T> R<T> userInfo(T user) {
+		R<T> r = new R<>();
 		r.put("userInfo", user);
 		r.put("msg", "获取用户信息成功");
 		return r;
@@ -146,22 +146,22 @@ public class R extends HashMap<String, Object> {
 	
 	// ========== 链式调用方法 ==========
 	
-	public R put(String key, Object value) {
+	public R<T> put(String key, Object value) {
 		super.put(key, value);
 		return this;
 	}
 	
-	public R data(Object data) {
+	public R<T> data(T data) {
 		this.put("data", data);
 		return this;
 	}
 	
-	public R msg(String msg) {
+	public R<T> msg(String msg) {
 		this.put("msg", msg);
 		return this;
 	}
 	
-	public R code(int code) {
+	public R<T> code(int code) {
 		this.put("code", code);
 		return this;
 	}
@@ -176,8 +176,9 @@ public class R extends HashMap<String, Object> {
 		return (String) this.get("msg");
 	}
 	
-	public Object getData() {
-		return this.get("data");
+	@SuppressWarnings("unchecked")
+	public T getData() {
+		return (T) this.get("data");
 	}
 	
 	public Long getTimestamp() {

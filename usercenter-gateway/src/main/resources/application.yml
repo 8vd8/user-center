@@ -19,24 +19,25 @@ spring:
           enabled: true
           lower-case-service-id: true
       routes:
-        - id: user-service
-          uri: lb://user-service
+        - id: usercenter-service
+          uri: lb://usercenter-service
           predicates:
             - Path=/user/**
           filters:
             - StripPrefix=1
         - id: permission-service
-          uri: lb://permission-service
+          uri: lb://usercenter-permission
           predicates:
             - Path=/permission/**
           filters:
             - StripPrefix=1
-        - id: logging-service
-          uri: lb://logging-service
-          predicates:
-            - Path=/logging/**
-          filters:
-            - StripPrefix=1
+# 日志服务是MQ消费者，无需HTTP路由
+#        - id: logging-service
+#          uri: lb://logging-service
+#          predicates:
+#            - Path=/logging/**
+#          filters:
+#            - StripPrefix=1
 
 # 日志配置
 logging:

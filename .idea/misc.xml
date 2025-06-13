@@ -12,6 +12,7 @@
         <option value="$PROJECT_DIR$/usercenter-gateway/pom.xml" />
         <option value="$PROJECT_DIR$/usercenter-permissson/pom.xml" />
         <option value="$PROJECT_DIR$/usercenter-permisson/pom.xml" />
+        <option value="$PROJECT_DIR$/usercenter-permission/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">

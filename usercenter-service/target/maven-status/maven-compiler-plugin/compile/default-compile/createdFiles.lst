@@ -3,6 +3,7 @@ com/xzc/usercenter/service/dto/UserLoginDTO.class
 com/xzc/usercenter/service/config/MyBatisConfig.class
 com/xzc/usercenter/service/dto/UserUpdateDTO.class
 com/xzc/usercenter/service/dao/UserDao.class
+com/xzc/usercenter/service/dto/PasswordResetDTO.class
 com/xzc/usercenter/service/feign/PermissionServiceClient.class
 com/xzc/usercenter/service/controller/UserController.class
 com/xzc/usercenter/service/service/UserService.class

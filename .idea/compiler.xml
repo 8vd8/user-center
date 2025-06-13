@@ -8,8 +8,8 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="usercenter-permisson" />
         <module name="usercenter-common" />
+        <module name="usercenter-permission" />
         <module name="usercenter-gateway" />
         <module name="usercenter-service" />
         <module name="renren-generator" />
@@ -18,6 +18,7 @@
     <bytecodeTargetLevel>
       <module name="user-center" target="1.8" />
       <module name="usercenter-logging" target="1.8" />
+      <module name="usercenter-permisson" target="1.8" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
@@ -25,6 +26,7 @@
       <module name="renren-generator" options="-parameters" />
       <module name="usercenter-common" options="-parameters" />
       <module name="usercenter-logging" options="-parameters" />
+      <module name="usercenter-permission" options="-parameters" />
       <module name="usercenter-permisson" options="-parameters" />
       <module name="usercenter-service" options="-parameters" />
     </option>

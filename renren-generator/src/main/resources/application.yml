@@ -8,7 +8,7 @@ spring:
     #MySQL配置
     driverClassName: com.mysql.cj.jdbc.Driver
     # 实际上是虚拟机的配置
-    url: jdbc:mysql://localhost:13306/usercenter_permisson?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://localhost:13306/usercenter_permission?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
     username: root
     password: 123456
     #oracle配置

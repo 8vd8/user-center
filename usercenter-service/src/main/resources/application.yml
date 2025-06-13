@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: user-service
+    name: usercenter-service
   cloud:
     nacos:
       discovery:

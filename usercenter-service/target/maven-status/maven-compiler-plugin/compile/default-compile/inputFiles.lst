@@ -1,4 +1,5 @@
 /Users/apple/Documents/subject/usercenter/usercenter-service/src/main/java/com/xzc/usercenter/service/service/UserService.java
+/Users/apple/Documents/subject/usercenter/usercenter-service/src/main/java/com/xzc/usercenter/service/dto/PasswordResetDTO.java
 /Users/apple/Documents/subject/usercenter/usercenter-service/src/main/java/com/xzc/usercenter/service/controller/UserController.java
 /Users/apple/Documents/subject/usercenter/usercenter-service/src/main/java/com/xzc/usercenter/service/dto/UserRegisterDTO.java
 /Users/apple/Documents/subject/usercenter/usercenter-service/src/main/java/com/xzc/usercenter/service/feign/PermissionServiceClient.java
