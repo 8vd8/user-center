@@ -1,0 +1,108 @@
+# 分库分表配置
+spring:
+  shardingsphere:
+    datasource:
+      names: ds0,ds1
+      # 数据源0
+      ds0:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:13306/user_center_0?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8
+        username: root
+        password: 123456
+      # 数据源1
+      ds1:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:13306/user_center_1?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8
+        username: root
+        password: 123456
+    
+    rules:
+      sharding:
+        # 分库分表规则
+        tables:
+          user:
+            # 实际数据节点
+            actual-data-nodes: ds$->{0..1}.user_$->{0..1}
+            # 分库策略
+            database-strategy:
+              standard:
+                sharding-column: id
+                sharding-algorithm-name: user-database-inline
+            # 分表策略
+            table-strategy:
+              standard:
+                sharding-column: id
+                sharding-algorithm-name: user-table-inline
+            # 主键生成策略
+            key-generate-strategy:
+              column: id
+              key-generator-name: snowflake
+        
+        # 分片算法配置
+        sharding-algorithms:
+          # 分库算法：根据用户ID取模
+          user-database-inline:
+            type: INLINE
+            props:
+              algorithm-expression: ds$->{id % 2}
+          # 分表算法：根据用户ID取模
+          user-table-inline:
+            type: INLINE
+            props:
+              algorithm-expression: user_$->{id % 2}
+        
+        # 主键生成器
+        key-generators:
+          snowflake:
+            type: SNOWFLAKE
+            props:
+              worker-id: 1
+    
+    # 属性配置
+    props:
+      # 显示SQL
+      sql-show: true
+      # 检查重复表
+      check-duplicate-table: false
+
+# MyBatis Plus配置
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**/*.xml
+  type-aliases-package: com.xzc.usercenter.service.entity
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    cache-enabled: false
+  global-config:
+    db-config:
+      id-type: auto
+      table-underline: true
+
+# MyBatis配置（兼容ShardingSphere）
+mybatis:
+  mapper-locations: classpath*:/mapper/**/*.xml
+  type-aliases-package: com.xzc.usercenter.service.entity
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+# RocketMQ配置
+rocketmq:
+  name-server: localhost:9876
+  producer:
+    group: user-service-producer
+    send-message-timeout: 3000
+    retry-times-when-send-failed: 3
+
+# 日志配置
+logging:
+  level:
+    com.xzc.usercenter.service.dao: debug
+    org.apache.shardingsphere: info
+    root: info
+
+# MD5盐值
+md5:
+  salt: xzc_usercenter_2023

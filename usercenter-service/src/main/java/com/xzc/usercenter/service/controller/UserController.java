@@ -27,6 +27,8 @@ public class UserController {
 
     /**
      * 用户注册
+     * 分库分表写入用户表 → RPC调用绑定默认角色
+     * todo  → 发送日志消息至MQ
      */
     @PostMapping("/register")
     public R register(@RequestBody UserRegisterDTO request) {

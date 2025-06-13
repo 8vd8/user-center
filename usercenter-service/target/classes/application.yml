@@ -8,14 +8,20 @@ spring:
     nacos:
       discovery:
         server-addr: localhost:8848
-        enabled: false
       config:
-        enabled: false
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:13306/user_center?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8
-    username: root
-    password: 123456
+        server-addr: localhost:8848
+        file-extension: yml
+  profiles:
+    include: sharding
+  autoconfigure:
+    exclude:
+      - com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure
+  # 注释掉单数据源配置，使用分库分表配置
+  # datasource:
+  #   driver-class-name: com.mysql.cj.jdbc.Driver
+  #   url: jdbc:mysql://localhost:13306/user_center?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8
+  #   username: root
+  #   password: 123456
 
 # MyBatis Plus配置
 mybatis-plus:

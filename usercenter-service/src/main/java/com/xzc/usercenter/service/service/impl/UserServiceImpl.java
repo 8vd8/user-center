@@ -14,10 +14,16 @@ import com.xzc.usercenter.service.dto.UserRegisterDTO;
 import com.xzc.usercenter.service.dto.UserUpdateDTO;
 import com.xzc.usercenter.service.entity.UserEntity;
 import com.xzc.usercenter.service.service.UserService;
+import com.xzc.usercenter.service.feign.PermissionServiceClient;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.Map;
@@ -27,6 +33,11 @@ import java.util.UUID;
 public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements UserService {
 
 
+    @Autowired
+    private PermissionServiceClient permissionServiceClient;
+    
+    @Autowired
+    private RocketMQTemplate rocketMQTemplate;
 
     private String salt = "FUCK";
     @Override
@@ -79,7 +90,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements
             throw new RuntimeException("用户名已存在");
         }
 
-        // 创建新用户
+        // 创建新用户 -> 防止并发
         UserEntity user = new UserEntity();
         BeanUtils.copyProperties(request, user);
         // 使用加盐的密码
@@ -89,6 +100,33 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements
         user.setUpdateTime(new Date());
 
         this.save(user);
+
+
+        // RPC调用权限服务绑定默认角色
+        try {
+            permissionServiceClient.bindDefaultRole(user.getId());
+        } catch (Exception e) {
+            // 记录日志但不影响用户注册流程
+            System.err.println("绑定默认角色失败: " + e.getMessage());
+        }
+
+        // 发送操作日志到MQ
+        try {
+            String clientIp = getClientIp();
+            String logData = String.format("{\"username\":\"%s\",\"email\":\"%s\"}", 
+                user.getUsername(), user.getEmail());
+            
+            // 构建日志消息
+            String logMessage = String.format(
+                "{\"userId\":%d,\"operation\":\"REGISTER\",\"ip\":\"%s\",\"data\":\"%s\",\"timestamp\":\"%s\"}",
+                user.getId(), clientIp, logData, new Date().toString()
+            );
+            
+            rocketMQTemplate.convertAndSend("operation-log-topic", logMessage);
+        } catch (Exception e) {
+            // 记录日志但不影响用户注册流程
+            System.err.println("发送MQ消息失败: " + e.getMessage());
+        }
     }
 
     @Override
@@ -192,6 +230,30 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements
         
         // 执行更新
         this.updateById(updateUser);
+    }
+
+    /**
+     * 获取客户端IP地址
+     */
+    private String getClientIp() {
+        try {
+            ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+            if (attributes != null) {
+                HttpServletRequest request = attributes.getRequest();
+                String xForwardedFor = request.getHeader("X-Forwarded-For");
+                if (xForwardedFor != null && !xForwardedFor.isEmpty() && !"unknown".equalsIgnoreCase(xForwardedFor)) {
+                    return xForwardedFor.split(",")[0];
+                }
+                String xRealIp = request.getHeader("X-Real-IP");
+                if (xRealIp != null && !xRealIp.isEmpty() && !"unknown".equalsIgnoreCase(xRealIp)) {
+                    return xRealIp;
+                }
+                return request.getRemoteAddr();
+            }
+        } catch (Exception e) {
+            System.err.println("获取客户端IP失败: " + e.getMessage());
+        }
+        return "unknown";
     }
 
 }
