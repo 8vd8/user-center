@@ -1,6 +1,8 @@
 /Users/apple/Documents/subject/usercenter/usercenter-common/src/main/java/com/xzc/common/utils/R.java
 /Users/apple/Documents/subject/usercenter/usercenter-common/src/main/java/com/xzc/common/xss/SQLFilter.java
+/Users/apple/Documents/subject/usercenter/usercenter-common/src/main/java/com/xzc/common/entity/Detail.java
 /Users/apple/Documents/subject/usercenter/usercenter-common/src/main/java/com/xzc/common/utils/Query.java
+/Users/apple/Documents/subject/usercenter/usercenter-common/src/main/java/com/xzc/common/event/OperationLogEvent.java
 /Users/apple/Documents/subject/usercenter/usercenter-common/src/main/java/com/xzc/common/utils/Constant.java
 /Users/apple/Documents/subject/usercenter/usercenter-common/src/main/java/com/xzc/common/utils/RRException.java
 /Users/apple/Documents/subject/usercenter/usercenter-common/src/main/java/com/xzc/common/utils/PageUtils.java

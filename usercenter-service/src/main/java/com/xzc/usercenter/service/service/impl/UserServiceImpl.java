@@ -1,5 +1,6 @@
 package com.xzc.usercenter.service.service.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 
 import com.alibaba.nacos.client.utils.StringUtils;
@@ -22,22 +23,21 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Slf4j
 @Service("userService")
 public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements UserService {
 
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Autowired
     private PermissionServiceClient permissionServiceClient;
@@ -104,6 +104,8 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements
         user.setStatus(1);
         user.setCreateTime(new Date());
         user.setUpdateTime(new Date());
+        user.setAvatar("default website");
+        user.setNickname("user"+username);
 
         this.save(user);
 
@@ -113,24 +115,30 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements
             permissionServiceClient.bindDefaultRole(user.getId());
         } catch (Exception e) {
             // 记录日志但不影响用户注册流程
-            System.err.println("绑定默认角色失败: " + e.getMessage());
+           log.error("绑定默认角色失败: " + e.getMessage());
         }
 
         // 发送操作日志到MQ
         try {
-            String clientIp = getClientIp();
-            String logData = String.format("{\"username\":\"%s\",\"email\":\"%s\"}", 
-                user.getUsername(), user.getEmail());
-            
-            // 构建日志消息
-            String logMessage = String.format(
-                "{\"userId\":%d,\"operation\":\"REGISTER\",\"ip\":\"%s\",\"data\":\"%s\",\"timestamp\":\"%s\"}",
-                user.getId(), clientIp, logData, new Date().toString()
-            );
-            
-            rocketMQTemplate.convertAndSend("operation-log-topic", logMessage);
+            Map<String, Object> detail = new HashMap<>();
 
-            log.info("操作日志发送成功: " + logMessage);
+            detail.put("username", username);
+            String email = user.getEmail();
+            if(email== null||email.equals("")){
+                email = "test@qq.com";
+            }
+            detail.put("email", email);
+
+            Map<String, Object> message = new HashMap<>();
+            message.put("userId", user.getId());
+            message.put("action", "REGISTER");
+            message.put("ip", getClientIp());
+            message.put("detail", detail);
+
+            String json = objectMapper.writeValueAsString(message);
+            rocketMQTemplate.convertAndSend("operation-log-topic", json);
+
+            log.info("操作日志发送成功: " + json);
         } catch (Exception e) {
             // 记录日志但不影响用户注册流程
             System.err.println("发送MQ消息失败: " + e.getMessage());
@@ -271,7 +279,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements
         try {
             // 获取当前用户角色ID
             R<Integer> roleResult = permissionServiceClient.getUserRoleId(currentUserId);
-            if (roleResult.getCode() != 0) {
+            if (roleResult.getCode() ==  0) {
                 throw new RuntimeException("获取用户权限失败");
             }
             Integer roleId = roleResult.getData();

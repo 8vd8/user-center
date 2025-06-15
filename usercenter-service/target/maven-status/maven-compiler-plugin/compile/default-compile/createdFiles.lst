@@ -1,6 +1,9 @@
 com/xzc/usercenter/service/service/impl/UserServiceImpl.class
 com/xzc/usercenter/service/dto/UserLoginDTO.class
+com/xzc/usercenter/service/interceptor/JwtInterceptor.class
+com/xzc/usercenter/service/utils/JwtUtil.class
 com/xzc/usercenter/service/config/MyBatisConfig.class
+com/xzc/usercenter/service/config/WebConfig.class
 com/xzc/usercenter/service/dto/UserUpdateDTO.class
 com/xzc/usercenter/service/dao/UserDao.class
 com/xzc/usercenter/service/dto/PasswordResetDTO.class

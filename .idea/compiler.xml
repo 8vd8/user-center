@@ -10,6 +10,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="usercenter-common" />
         <module name="usercenter-permission" />
+        <module name="usercenter-logging" />
         <module name="usercenter-gateway" />
         <module name="usercenter-service" />
         <module name="renren-generator" />
@@ -17,7 +18,7 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="user-center" target="1.8" />
-      <module name="usercenter-logging" target="1.8" />
+      <module name="usercenter" target="1.8" />
       <module name="usercenter-permisson" target="1.8" />
     </bytecodeTargetLevel>
   </component>
