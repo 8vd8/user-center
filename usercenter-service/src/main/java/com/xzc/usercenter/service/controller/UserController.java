@@ -8,7 +8,7 @@ import com.xzc.usercenter.service.dto.UserRegisterDTO;
 import com.xzc.usercenter.service.dto.UserUpdateDTO;
 import com.xzc.usercenter.service.entity.UserEntity;
 import com.xzc.usercenter.service.service.UserService;
-import com.xzc.usercenter.service.utils.JwtUtil;
+import com.xzc.usercenter.service.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -112,12 +112,12 @@ public class UserController {
      * 查询特定用户信息
      * 普通用户仅能查询自己，管理员能查询普通用户，超管能查询所有人
      */
-    @GetMapping("/user/{targetUserId}")
-    public R<UserEntity> getUserInfoWithPermission(@PathVariable Long targetUserId,
+    @GetMapping("/user/{userId}")
+    public R<UserEntity> getUserInfoWithPermission(@PathVariable Long userId,
                                                    HttpServletRequest request) {
         try {
             Long currentUserId = getCurrentUserId(request);
-            UserEntity user = userService.getUserByIdWithPermission(targetUserId, currentUserId);
+            UserEntity user = userService.getUserByIdWithPermission(userId, currentUserId);
             return R.ok(user);
         } catch (Exception e) {
             return R.error("获取用户信息失败: " + e.getMessage());
@@ -128,7 +128,7 @@ public class UserController {
      * 修改用户信息 - 根据权限限制
      * 普通用户改自己，管理员改普通用户，超管改所有
      */
-    @PutMapping("/user/{uerId}")
+    @PutMapping("/user/{userId}")
     public R<String> updateUserWithPermission(@PathVariable Long userId,
                                     @Valid @RequestBody UserUpdateDTO user,
                                     HttpServletRequest request) {

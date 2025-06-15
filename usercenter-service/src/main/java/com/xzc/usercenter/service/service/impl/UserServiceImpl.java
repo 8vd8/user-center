@@ -1,6 +1,7 @@
 package com.xzc.usercenter.service.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.xzc.usercenter.service.util.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import com.alibaba.nacos.client.utils.StringUtils;
@@ -16,7 +17,6 @@ import com.xzc.usercenter.service.dto.UserRegisterDTO;
 import com.xzc.usercenter.service.dto.UserUpdateDTO;
 import com.xzc.usercenter.service.entity.UserEntity;
 import com.xzc.usercenter.service.service.UserService;
-import com.xzc.usercenter.service.utils.JwtUtil;
 import com.xzc.usercenter.service.feign.PermissionServiceClient;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.BeanUtils;
@@ -248,6 +248,8 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements
         
         // 执行更新
         this.updateById(updateUser);
+
+
     }
 
     /**
@@ -279,7 +281,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements
         try {
             // 获取当前用户角色ID
             R<Integer> roleResult = permissionServiceClient.getUserRoleId(currentUserId);
-            if (roleResult.getCode() ==  0) {
+            if (roleResult.getCode() ==  R.ERROR_CODE) {
                 throw new RuntimeException("获取用户权限失败");
             }
             Integer roleId = roleResult.getData();
@@ -316,7 +318,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements
         try {
             // 获取当前用户角色ID
             R<Integer> roleResult = permissionServiceClient.getUserRoleId(currentUserId);
-            if (roleResult.getCode() != 0) {
+            if (roleResult.getCode() ==R.ERROR_CODE) {
                 throw new RuntimeException("获取用户权限失败");
             }
             Integer roleId = roleResult.getData();
@@ -334,8 +336,8 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements
             } else if (roleId == 3) {
                 // 管理员：只能查看普通用户
                 R<Integer> targetRoleResult = permissionServiceClient.getUserRoleId(id);
-                if (targetRoleResult.getCode() != 0) {
-                    throw new RuntimeException("获取目标用户权限失败");
+                if (targetRoleResult.getCode() == R.ERROR_CODE) {
+                    throw new RuntimeException("目标用户没有权限");
                 }
                 Integer targetRoleId = targetRoleResult.getData();
                 if (targetRoleId != 2) {
@@ -357,24 +359,29 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements
     }
 
     @Override
-    public void updateUserWithPermission(UserUpdateDTO user, Long currentUserId) {
+    public void updateUserWithPermission(UserUpdateDTO updateUser, Long currentUserId) {
         try {
-            // 获取当前用户角色ID
+            // 获取当前用户角色ID-》等级
             R<Integer> roleResult = permissionServiceClient.getUserRoleId(currentUserId);
-            if (roleResult.getCode() != 0) {
+            if (roleResult.getCode() == R.ERROR_CODE) {
                 throw new RuntimeException("获取用户权限失败");
             }
             Integer roleId = roleResult.getData();
-            
-            Long targetUserId = user.getId();
-            
-            // 权限校验
-            if (roleId == 1) {
-                // 超管：可以修改所有用户
-            } else if (roleId == 3) {
+            //目标用户的id
+            Long targetUserId = updateUser.getId();
+            Long updateRoleId = updateUser.getUpdateRoleId();
+            if(updateRoleId == 1){
+                throw new RuntimeException("超级管理员是唯一的，无法升级");
+            }
+
+            R<Integer> userRoleR = permissionServiceClient.getUserRoleId(targetUserId);
+            if(userRoleR.getCode() == R.ERROR_CODE){
+                throw new RuntimeException("更新的用户没有权限");
+            }
+           if (roleId == 3) {
                 // 管理员：只能修改普通用户
                 R<Integer> targetRoleResult = permissionServiceClient.getUserRoleId(targetUserId);
-                if (targetRoleResult.getCode() != 0) {
+                if (targetRoleResult.getCode() == R.ERROR_CODE) {
                     throw new RuntimeException("获取目标用户权限失败");
                 }
                 Integer targetRoleId = targetRoleResult.getData();
@@ -386,12 +393,29 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements
                 if (!currentUserId.equals(targetUserId)) {
                     throw new RuntimeException("权限不足，只能修改自己的信息");
                 }
+            } else if (roleId == 1) {
+                // 超级管理员：可以升级/降级用户角色
+                if (updateRoleId != null) {
+                    Integer currentRoleId = userRoleR.getData();
+                    // 如果当前角色和目标角色不同，则进行升级或降级
+                    if (!currentRoleId.equals(updateRoleId.intValue())) {
+                        if (updateRoleId == 3) {
+                            // 升级为管理员
+                            permissionServiceClient.upgradeToAdmin(targetUserId);
+                            log.info("用户 {} 已被升级为管理员", targetUserId);
+                        } else if (updateRoleId == 2) {
+                            // 降级为普通用户
+                            permissionServiceClient.downgradeToUser(targetUserId);
+                            log.info("用户 {} 已被降级为普通用户", targetUserId);
+                        }
+                    }
+                }
             } else {
                 throw new RuntimeException("无效的角色权限");
             }
             
             // 执行更新
-            this.updateUser(user);
+            this.updateUser(updateUser);
         } catch (Exception e) {
             throw new RuntimeException("更新用户信息失败: " + e.getMessage());
         }

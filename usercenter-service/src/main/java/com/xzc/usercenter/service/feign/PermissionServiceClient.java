@@ -39,4 +39,16 @@ public interface PermissionServiceClient {
      */
     @GetMapping("/permission/users-by-role")
     R<List<Long>> getUserIdsByRoleId(@RequestParam("roleId") Integer roleId);
+    
+    /**
+     * 升级用户为管理员
+     */
+    @PostMapping("/permission/upgrade-to-admin")
+    R<String> upgradeToAdmin(@RequestParam("userId") Long userId);
+    
+    /**
+     * 降级用户为普通用户
+     */
+    @PostMapping("/permission/downgrade-to-user")
+    R<String> downgradeToUser(@RequestParam("userId") Long userId);
 }
