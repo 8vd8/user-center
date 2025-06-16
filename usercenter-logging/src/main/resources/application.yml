@@ -33,6 +33,21 @@ rocketmq:
   consumer:
     pull-batch-size: 10
 
+# Seata配置
+seata:
+  enabled: true
+  application-id: usercenter-logging
+  tx-service-group: my_tx_group
+  data-source-proxy-mode: AT
+  registry:
+    type: file
+    file:
+      name: file.conf
+  config:
+    type: file
+    file:
+      name: file.conf
+
 # 日志配置
 logging:
   level:

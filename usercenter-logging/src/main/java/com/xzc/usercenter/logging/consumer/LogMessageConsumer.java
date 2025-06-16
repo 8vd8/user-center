@@ -5,6 +5,7 @@ import com.xzc.common.entity.Detail;
 import com.xzc.common.event.OperationLogEvent;
 import com.xzc.usercenter.logging.entity.OperationLogsEntity;
 import com.xzc.usercenter.logging.service.LogsService;
+import io.seata.spring.annotation.GlobalTransactional;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
 import org.apache.rocketmq.spring.core.RocketMQListener;
@@ -34,6 +35,7 @@ public class LogMessageConsumer implements RocketMQListener<String> {
     private ObjectMapper objectMapper;
     
     @Override
+    @GlobalTransactional(name = "logging-consume-message", rollbackFor = Exception.class)
     public void onMessage(String message) {
         try {
             log.info("接收到日志消息: {}", message);
@@ -54,6 +56,7 @@ public class LogMessageConsumer implements RocketMQListener<String> {
             log.info("日志保存成功: userId={}, action={}", event.getUserId(), event.getAction());
         } catch (Exception e) {
             log.error("处理日志消息失败: {}", e.getMessage(), e);
+            // 注意：RocketMQ消息监听器中不能抛出检查异常
         }
     }
 }

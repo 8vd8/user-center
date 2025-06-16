@@ -22,7 +22,7 @@ public class JwtUtil {
     private static final String SECRET = "usercenter_jwt_secret_key_2024";
     
     // JWT过期时间（24小时）
-    private static final long EXPIRATION = 24 * 60 * 60 * 1000;
+    private static final long EXPIRATION = 24 * 60 * 60 * 1000*15;
     
     // JWT请求头名称
     private static final String HEADER_NAME = "Authorization";
