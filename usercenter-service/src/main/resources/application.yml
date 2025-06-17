@@ -16,12 +16,12 @@ spring:
   autoconfigure:
     exclude:
       - com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure
-  # 注释掉单数据源配置，使用分库分表配置
-  # datasource:
-  #   driver-class-name: com.mysql.cj.jdbc.Driver
-  #   url: jdbc:mysql://localhost:13306/user_center?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8
-  #   username: root
-  #   password: 123456
+    # 临时使用单数据源配置进行分布式事务测试
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://localhost:13306/user_center?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8
+#    username: root
+#    password: 123456
 
 # MyBatis Plus配置
 mybatis-plus:
@@ -35,15 +35,43 @@ mybatis-plus:
 
 # RocketMQ配置
 rocketmq:
-  name-server: 127.0.0.1:9876
+  name-server: localhost:9876
   producer:
     group: user-service-producer
     send-message-timeout: 3000
     retry-times-when-send-failed: 3
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+# Seata配置
+seata:
+  enabled: true
+  application-id: usercenter-service
+  tx-service-group: default_tx_group
+  enable-auto-data-source-proxy: false
+  service:
+    vgroup-mapping:
+      default_tx_group: default
+    grouplist:
+      default: localhost:8091
+  registry:
+    type: nacos
+    nacos:
+      server-addr: localhost:8848
+      group: SEATA_GROUP
+      namespace: ""
+  config:
+    type: nacos
+    nacos:
+      server-addr: localhost:8848
+      group: SEATA_GROUP
+      namespace: ""
 
 # 日志配置
 logging:
   level:
+    com.alibaba.nacos.client.naming: WARN
     com.xzc.user: debug
     root: info
 

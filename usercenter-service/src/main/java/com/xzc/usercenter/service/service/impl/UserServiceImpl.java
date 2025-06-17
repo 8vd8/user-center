@@ -26,6 +26,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import io.seata.spring.annotation.GlobalTransactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
@@ -58,6 +59,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements
     }
 
     @Override
+    @GlobalTransactional
     public void register(UserRegisterDTO request) {
         String username = request.getUsername();
         String password = request.getPassword();
@@ -146,6 +148,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public String login(UserLoginDTO request) {
         // 查询用户
         QueryWrapper<UserEntity> queryWrapper = new QueryWrapper<>();

@@ -22,7 +22,7 @@ spring:
         - id: usercenter-service
           uri: lb://usercenter-service
           predicates:
-            - Path=/user/**
+            - Path=/service/**
           filters:
             - StripPrefix=1
 # 日志服务是MQ消费者，无需HTTP路由
