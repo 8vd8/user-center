@@ -3,7 +3,6 @@ com/xzc/common/utils/Constant$CloudService.class
 com/xzc/common/xss/SQLFilter.class
 com/xzc/common/utils/Constant$ScheduleStatus.class
 com/xzc/common/xss/HTMLFilter.class
-com/xzc/common/utils/JwtUtil.class
 com/xzc/common/entity/Detail.class
 com/xzc/common/utils/PageUtils.class
 com/xzc/common/utils/Constant.class

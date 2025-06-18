@@ -10,6 +10,6 @@
 /Users/apple/Documents/subject/usercenter/usercenter-service/src/main/java/com/xzc/usercenter/service/entity/UserEntity.java
 /Users/apple/Documents/subject/usercenter/usercenter-service/src/main/java/com/xzc/usercenter/service/dao/UserDao.java
 /Users/apple/Documents/subject/usercenter/usercenter-service/src/main/java/com/xzc/usercenter/service/dto/UserUpdateDTO.java
+/Users/apple/Documents/subject/usercenter/usercenter-service/src/main/java/com/xzc/usercenter/service/cache/PermissionCacheService.java
 /Users/apple/Documents/subject/usercenter/usercenter-service/src/main/java/com/xzc/usercenter/service/config/MyBatisConfig.java
-/Users/apple/Documents/subject/usercenter/usercenter-service/src/main/java/com/xzc/usercenter/service/util/JwtUtil.java
 /Users/apple/Documents/subject/usercenter/usercenter-service/src/main/java/com/xzc/usercenter/service/config/WebConfig.java

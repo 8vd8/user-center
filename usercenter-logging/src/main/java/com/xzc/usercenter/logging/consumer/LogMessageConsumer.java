@@ -43,17 +43,35 @@ public class LogMessageConsumer implements RocketMQListener<String> {
             // 解析OperationLogEvent
             OperationLogEvent event = objectMapper.readValue(message, OperationLogEvent.class);
             
+            // 幂等性检查：先查询是否已经处理过该消息
+            if (event.getMsgId() != null && logService.existsByMsgId(event.getMsgId())) {
+                log.info("消息已处理过，跳过: msgId={}", event.getMsgId());
+                return;
+            }
+            
             // 转换为OperationLog实体
             OperationLogsEntity operationLog = new OperationLogsEntity();
             operationLog.setUserId(event.getUserId());
+            operationLog.setUsername(event.getUsername());
             operationLog.setAction(event.getAction());
+            operationLog.setMethod(event.getMethod());
+            operationLog.setParams(event.getParams());
             operationLog.setIp(event.getIp());
+            operationLog.setLocation(event.getLocation());
+            operationLog.setMsgId(event.getMsgId());
+            operationLog.setOperationTime(event.getOperationTime());
+            operationLog.setServiceSource(event.getServiceSource());
+            operationLog.setTraceId(event.getTraceId());
+            
             Detail detail = event.getDetail();
-            operationLog.setDetail(objectMapper.writeValueAsString(detail));
+            if (detail != null) {
+                operationLog.setDetail(objectMapper.writeValueAsString(detail));
+            }
             
             // 保存日志
             logService.saveLog(operationLog);
-            log.info("日志保存成功: userId={}, action={}", event.getUserId(), event.getAction());
+            log.info("日志保存成功: userId={}, action={}, msgId={}, traceId={}", 
+                    event.getUserId(), event.getAction(), event.getMsgId(), event.getTraceId());
         } catch (Exception e) {
             log.error("处理日志消息失败: {}", e.getMessage(), e);
             // 注意：RocketMQ消息监听器中不能抛出检查异常

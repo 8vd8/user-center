@@ -1,9 +1,5 @@
 package com.xzc.usercenter.service.interceptor;
 
-
-
-import com.xzc.usercenter.service.util.JwtUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -22,8 +18,7 @@ import java.util.List;
 @Component
 public class JwtInterceptor implements HandlerInterceptor {
     
-    @Autowired
-    private JwtUtil jwtUtil;
+    // JWT验证已迁移到网关层，这里只需要从请求头中获取用户信息
     
     // 不需要JWT验证的接口路径
     private static final List<String> EXCLUDE_PATHS = Arrays.asList(
@@ -46,31 +41,34 @@ public class JwtInterceptor implements HandlerInterceptor {
         }
         
         try {
-            // 获取JWT令牌
-            String token = jwtUtil.getTokenFromRequest(request);
+            // 从请求头中获取用户信息（由网关层添加）
+            String userIdHeader = request.getHeader("X-User-ID");
+            String usernameHeader = request.getHeader("X-Username");
+            String roleCodeHeader = request.getHeader("X-Role-Code");
+            String roleIdHeader = request.getHeader("X-Role-ID");
             
-            if (token == null) {
-                sendErrorResponse(response, 401, "未找到JWT令牌，请先登录");
-                return false;
-            }
-            
-            // 验证JWT令牌
-            if (!jwtUtil.validateToken(token)) {
-                sendErrorResponse(response, 401, "JWT令牌无效或已过期，请重新登录");
+            if (userIdHeader == null || usernameHeader == null) {
+                sendErrorResponse(response, 401, "未找到用户信息，请先登录");
                 return false;
             }
             
             // 将用户信息存储到请求属性中，方便后续使用
-            Long userId = jwtUtil.getUserIdFromToken(token);
-            String username = jwtUtil.getUsernameFromToken(token);
+            Long userId = Long.parseLong(userIdHeader);
+            String username = usernameHeader;
+            String roleCode = roleCodeHeader;
+            Long roleId = roleIdHeader != null ? Long.parseLong(roleIdHeader) : null;
             
             request.setAttribute("currentUserId", userId);
             request.setAttribute("currentUsername", username);
+            request.setAttribute("currentRoleCode", roleCode);
+            if (roleId != null) {
+                request.setAttribute("currentRoleId", roleId);
+            }
             
             return true;
             
         } catch (Exception e) {
-            sendErrorResponse(response, 401, "JWT令牌验证失败: " + e.getMessage());
+            sendErrorResponse(response, 401, "用户信息验证失败: " + e.getMessage());
             return false;
         }
     }

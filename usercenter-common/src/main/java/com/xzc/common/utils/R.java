@@ -143,8 +143,15 @@ public class R<T> extends HashMap<String, Object> {
 		r.put("msg", "获取用户信息成功");
 		return r;
 	}
-	
-	// ========== 链式调用方法 ==========
+
+    public static<T> R<T> success(T entity) {
+		R<T> r = new R<>();
+		r.put("msg", entity);
+		r.put("code", SUCCESS_CODE);
+		return r;
+    }
+
+    // ========== 链式调用方法 ==========
 	
 	public R<T> put(String key, Object value) {
 		super.put(key, value);
