@@ -1,1 +1,11 @@
 /Users/apple/Documents/subject/usercenter/usercenter-gateway/src/main/java/com/xzc/gateway/GatewayServiceApplication.java
+/Users/apple/Documents/subject/usercenter/usercenter-gateway/src/main/java/com/xzc/gateway/config/RateLimiterProperties.java
+/Users/apple/Documents/subject/usercenter/usercenter-gateway/src/main/java/com/xzc/gateway/config/RedisConfig.java
+/Users/apple/Documents/subject/usercenter/usercenter-gateway/src/main/java/com/xzc/gateway/config/RocketMQConfig.java
+/Users/apple/Documents/subject/usercenter/usercenter-gateway/src/main/java/com/xzc/gateway/controller/TestController.java
+/Users/apple/Documents/subject/usercenter/usercenter-gateway/src/main/java/com/xzc/gateway/filter/JwtFilter.java
+/Users/apple/Documents/subject/usercenter/usercenter-gateway/src/main/java/com/xzc/gateway/filter/RateLimiterFilter.java
+/Users/apple/Documents/subject/usercenter/usercenter-gateway/src/main/java/com/xzc/gateway/service/MessageService.java
+/Users/apple/Documents/subject/usercenter/usercenter-gateway/src/main/java/com/xzc/gateway/service/RateLimiterService.java
+/Users/apple/Documents/subject/usercenter/usercenter-gateway/src/main/java/com/xzc/gateway/service/impl/MessageServiceImpl.java
+/Users/apple/Documents/subject/usercenter/usercenter-gateway/src/main/java/com/xzc/gateway/util/JwtUtil.java

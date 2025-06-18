@@ -6,6 +6,18 @@ spring:
     name: gateway-service
   main:
     web-application-type: reactive
+  # Redis配置
+  redis:
+    host: localhost
+    port: 6379
+    database: 0
+    timeout: 10000
+    lettuce:
+      pool:
+        max-active: 8
+        max-wait: -1
+        max-idle: 8
+        min-idle: 0
   cloud:
     nacos:
       discovery:
@@ -32,6 +44,25 @@ spring:
 #            - Path=/logging/**
 #          filters:
 #            - StripPrefix=1
+
+# RocketMQ配置
+rocketmq:
+  name-server: localhost:9876
+  producer:
+    group: gateway-producer-group
+    send-message-timeout: 3000
+    retry-times-when-send-failed: 3
+
+# 令牌桶限流配置
+rate-limiter:
+  # 令牌桶容量
+  capacity: 100
+  # 每秒填充令牌数
+  rate: 10
+  # 请求超过限制时的响应码
+  response-code: 429
+  # 请求超过限制时的响应消息
+  response-message: "请求过于频繁，请稍后再试"
 
 # 日志配置
 logging:

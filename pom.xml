@@ -57,12 +57,7 @@
             <artifactId>lombok</artifactId>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>com.xzc</groupId>
-            <artifactId>common</artifactId>
-            <version>1.0.0</version>
-            <scope>compile</scope>
-        </dependency>
+        <!-- 已移除错误的common依赖 -->
 
         <!-- Seata 分布式事务 -->
         <dependency>
