@@ -52,7 +52,10 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements
     private PermissionCacheService permissionCacheService;
     
     @Autowired
-    private RocketMQTemplate rocketMQTemplate;
+private RocketMQTemplate rocketMQTemplate;
+
+@Autowired
+private com.xzc.usercenter.service.service.ReliableMessageService reliableMessageService;
 
     private String salt = "FUCK";
     @Override
@@ -67,7 +70,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements
     }
 
     @Override
-    @GlobalTransactional
+    @GlobalTransactional(name = "user-register", rollbackFor = Exception.class)
     public void register(UserRegisterDTO request) {
         String username = request.getUsername();
         String password = request.getPassword();
@@ -126,9 +129,10 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements
         } catch (Exception e) {
             // 记录日志但不影响用户注册流程
            log.error("绑定默认角色失败: " + e.getMessage());
+           throw new BusinessException("绑定默认角色失败");
         }
 
-        // 发送操作日志到MQ
+        // 发送操作日志到MQ（使用可靠消息服务）
         try {
             Map<String, Object> detail = new HashMap<>();
 
@@ -146,12 +150,14 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements
             message.put("detail", detail);
 
             String json = objectMapper.writeValueAsString(message);
-            rocketMQTemplate.convertAndSend("operation-log-topic", json);
+            // 使用可靠消息服务发送操作日志到MQ
+            reliableMessageService.sendMessage("operation-log-topic", json);
 
             log.info("操作日志发送成功: " + json);
         } catch (Exception e) {
             // 记录日志但不影响用户注册流程
-            System.err.println("发送MQ消息失败: " + e.getMessage());
+            log.error("发送MQ消息失败: " + e.getMessage(), e);
+            throw new BusinessException("发送MQ消息失败");
         }
     }
 

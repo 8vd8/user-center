@@ -16,7 +16,14 @@ spring:
   autoconfigure:
     exclude:
       - com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure
+  # Redis配置
+  redis:
+    host: localhost
+    port: 6379
+    database: 0
+    timeout: 3000
     # 临时使用单数据源配置进行分布式事务测试
+    password: 123456
 #  datasource:
 #    driver-class-name: com.mysql.cj.jdbc.Driver
 #    url: jdbc:mysql://localhost:13306/user_center?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8
@@ -50,11 +57,12 @@ seata:
   application-id: usercenter-service
   tx-service-group: default_tx_group
   enable-auto-data-source-proxy: false
+  data-source-proxy-mode: XA
   service:
     vgroup-mapping:
       default_tx_group: default
     grouplist:
-      default: localhost:8091
+      default: localhost:8092
   registry:
     type: nacos
     nacos:

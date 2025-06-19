@@ -29,6 +29,12 @@
             <artifactId>spring-boot-starter-jdbc</artifactId>
         </dependency>
         
+        <!-- HikariCP连接池 -->
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+        </dependency>
+        
         <!-- 公共模块 -->
         <dependency>
             <groupId>com.xzc.usercenter</groupId>

@@ -38,6 +38,7 @@ seata:
   enabled: true
   application-id: usercenter-logging
   tx-service-group: default_tx_group
+  enable-auto-data-source-proxy: true
   data-source-proxy-mode: AT
   client:
     rm:

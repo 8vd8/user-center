@@ -18,6 +18,7 @@ spring:
         max-wait: -1
         max-idle: 8
         min-idle: 0
+    password: 123456
   cloud:
     nacos:
       discovery:
@@ -64,6 +65,17 @@ rate-limiter:
   # 请求超过限制时的响应消息
   response-message: "请求过于频繁，请稍后再试"
 
+# Seata配置
+seata:
+  enabled: true
+  application-id: usercenter-service
+  tx-service-group: default_tx_group
+  enable-auto-data-source-proxy: false
+  service:
+    vgroup-mapping:
+      default_tx_group: default
+    grouplist:
+      default: localhost:8092
 # 日志配置
 logging:
   level:

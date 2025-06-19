@@ -10,7 +10,6 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
  * 用户服务启动类
  * @author fuckchao
  */
-@MapperScan("com.xzc.usercenter.service.dao")
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableFeignClients(basePackages = "com.xzc.usercenter.service.feign")
