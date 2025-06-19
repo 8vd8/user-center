@@ -2,43 +2,47 @@
 spring:
   shardingsphere:
     datasource:
-      names: ds0,ds1
-      # 数据源0
+      names: ds0,ds1,infra
       ds0:
         type: com.alibaba.druid.pool.DruidDataSource
         driver-class-name: com.mysql.cj.jdbc.Driver
         url: jdbc:mysql://localhost:13306/user_center_0?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8
         username: root
         password: 123456
-      # 数据源1
       ds1:
         type: com.alibaba.druid.pool.DruidDataSource
         driver-class-name: com.mysql.cj.jdbc.Driver
         url: jdbc:mysql://localhost:13306/user_center_1?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8
         username: root
         password: 123456
+      infra:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:13306/infra?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8
+        username: root
+        password: 123456
     
     rules:
       sharding:
-        # 分库分表规则
         tables:
           user:
-            # 实际数据节点
             actual-data-nodes: ds$->{0..1}.user_$->{0..1}
-            # 分库策略
             database-strategy:
               standard:
                 sharding-column: id
                 sharding-algorithm-name: user-database-inline
-            # 分表策略
             table-strategy:
               standard:
                 sharding-column: id
                 sharding-algorithm-name: user-table-inline
-            # 主键生成策略
             key-generate-strategy:
               column: id
               key-generator-name: snowflake
+
+          message_log:
+            actual-data-nodes: infra.message_log
+            table-strategy:
+              none: {}
         
         # 分片算法配置
         sharding-algorithms:
