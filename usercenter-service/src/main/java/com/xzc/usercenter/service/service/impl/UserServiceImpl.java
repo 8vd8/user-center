@@ -33,9 +33,8 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import io.seata.spring.annotation.GlobalTransactional;
 
 import javax.servlet.http.HttpServletRequest;
-import java.nio.charset.StandardCharsets;
+import com.xzc.usercenter.service.utils.JwtUtil;
 import java.util.*;
-import java.util.Base64;
 
 @Slf4j
 @Service("userService")
@@ -56,6 +55,9 @@ private RocketMQTemplate rocketMQTemplate;
 
 @Autowired
 private com.xzc.usercenter.service.service.ReliableMessageService reliableMessageService;
+
+    @Autowired
+    private JwtUtil jwtUtil;
 
     private String salt = "FUCK";
     @Override
@@ -193,12 +195,8 @@ private com.xzc.usercenter.service.service.ReliableMessageService reliableMessag
         }
         
         // 生成包含权限码和角色ID的JWT token
-        // 注意：JWT生成逻辑已迁移到网关层，这里只返回一个简化的token用于测试
-        // 实际项目中，这里应该调用网关的JWT生成服务
-        String token = "Bearer " + Base64.getEncoder().encodeToString(
-            String.format("{\"userId\":%d,\"username\":\"%s\",\"roleCode\":\"%s\",\"roleId\":%d}", 
-                user.getId(), user.getUsername(), roleCode, roleId).getBytes(StandardCharsets.UTF_8));
-        return token;
+        String token = jwtUtil.generateTokenWithRoleAndId(user.getId(), user.getUsername(), roleCode, roleId);
+        return "Bearer " + token;
     }
 
     @Override

@@ -21,3 +21,4 @@
 /Users/apple/Documents/subject/usercenter/usercenter-service/src/main/java/com/xzc/usercenter/service/config/MyBatisConfig.java
 /Users/apple/Documents/subject/usercenter/usercenter-service/src/main/java/com/xzc/usercenter/service/config/WebConfig.java
 /Users/apple/Documents/subject/usercenter/usercenter-service/src/main/java/com/xzc/usercenter/service/dao/MessageLogDao.java
+/Users/apple/Documents/subject/usercenter/usercenter-service/src/main/java/com/xzc/usercenter/service/utils/JwtUtil.java

@@ -99,7 +99,7 @@ public class PermissionCacheService {
         // 缓存未命中，从远程服务获取
         try {
             R<Integer> result = permissionServiceClient.getUserRoleId(userId);
-            if (result != null && result.getCode() == 200 && result.getData() != null) {
+            if (result != null && result.getCode() ==  R.SUCCESS_CODE && result.getData() != null) {
                 String roleCode = String.valueOf(result.getData());
                 Integer roleId = result.getData();
                 // 更新缓存
