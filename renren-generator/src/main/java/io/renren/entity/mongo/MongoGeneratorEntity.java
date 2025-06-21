@@ -10,7 +10,7 @@ import java.util.Map;
  * mysql一张表只需要一个表信息和列名信息
  * 但是mongo一张表可能需要多个实体类  所以单独用一个bean封装
  *
- * @author gxz
+ * @author xzc
  * @date 2020/5/10 0:14
  */
 public class MongoGeneratorEntity {

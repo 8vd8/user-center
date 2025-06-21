@@ -19,7 +19,7 @@ import java.util.Map;
 /**
  * 查询参数
  *
- * @author Mark sunlightcs@gmail.com
+ * @author xzc
  */
 public class Query<T> {
 

@@ -8,7 +8,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 
 /**
  * 用户服务启动类
- * @author fuckchao
+ * @author xzc
  */
 @SpringBootApplication
 @EnableDiscoveryClient

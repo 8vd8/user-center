@@ -6,7 +6,7 @@ import java.util.Date;
 /**
  * 日期处理
  * 
- * @author chenshun
+ * @author xzc
  * @email sunlightcs@gmail.com
  * @date 2016年12月21日 下午12:53:33
  */

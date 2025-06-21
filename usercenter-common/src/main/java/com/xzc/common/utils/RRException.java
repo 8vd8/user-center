@@ -11,7 +11,7 @@ package com.xzc.common.utils;
 /**
  * 自定义异常
  *
- * @author Mark sunlightcs@gmail.com
+ * @author xzc
  */
 public class RRException extends RuntimeException {
 	private static final long serialVersionUID = 1L;

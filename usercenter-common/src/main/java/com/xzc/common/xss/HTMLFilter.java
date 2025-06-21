@@ -36,9 +36,7 @@ import java.util.regex.Pattern;
  * performance), please contact us.  The latest version of this
  * source, and our contact details, can be found at http://xss-html-filter.sf.net
  *
- * @author Joseph O'Connell
- * @author Cal Hendersen
- * @author Michael Semb Wever
+ * @author xzc
  */
 public final class HTMLFilter {
 

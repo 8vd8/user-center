@@ -12,7 +12,7 @@ import lombok.Data;
 /**
  * 用户表
  * 
- * @author fuckchao
+ * @author xzc
  * @email 1936002261@qq.com
  * @date 2025-06-12 18:07:16
  */

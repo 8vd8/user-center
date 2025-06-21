@@ -17,7 +17,7 @@ import java.util.Map;
  * 统一返回结果类
  * 支持用户服务的各种接口返回需求
  *
- * @author Mark sunlightcs@gmail.com
+ * @author xzc
  */
 public class R<T> extends HashMap<String, Object> {
 	private static final long serialVersionUID = 1L;

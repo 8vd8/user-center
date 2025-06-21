@@ -11,7 +11,7 @@ import java.util.*;
  * 解析表之后得到的信息实体
  * 换句话说这个类就是一张mongo一张表的内容
  *
- * @author gxz 514190950@qq.com
+ * @author xzc
  */
 
 public class MongoDefinition implements Serializable {

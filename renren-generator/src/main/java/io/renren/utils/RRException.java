@@ -3,7 +3,7 @@ package io.renren.utils;
 /**
  * 自定义异常
  * 
- * @author chenshun
+ * @author xzc
  * @email sunlightcs@gmail.com
  * @date 2016年10月27日 下午10:11:27
  */

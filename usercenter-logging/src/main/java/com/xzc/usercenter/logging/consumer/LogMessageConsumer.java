@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 
 /**
  * 日志消息消费者
- * @author xzc (GitHub: 8vd8)
+ * @author xzc
  */
 @Slf4j
 @Component

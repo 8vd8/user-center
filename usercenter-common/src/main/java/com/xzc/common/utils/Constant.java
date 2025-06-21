@@ -11,7 +11,7 @@ package com.xzc.common.utils;
 /**
  * 常量
  *
- * @author Mark sunlightcs@gmail.com
+ * @author xzc
  */
 public class Constant {
 	/** 超级管理员ID */
@@ -39,7 +39,7 @@ public class Constant {
 	/**
 	 * 菜单类型
 	 * 
-	 * @author chenshun
+	 * @author xzc
 	 * @email sunlightcs@gmail.com
 	 * @date 2016年11月15日 下午1:24:29
 	 */
@@ -71,7 +71,7 @@ public class Constant {
     /**
      * 定时任务状态
      * 
-     * @author chenshun
+     * @author xzc
      * @email sunlightcs@gmail.com
      * @date 2016年12月3日 上午12:07:22
      */
